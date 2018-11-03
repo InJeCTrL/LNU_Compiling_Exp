@@ -12,10 +12,13 @@ int GetValueofInt(char *strptr,long *retval,int Redix)
 	ptr = strptr;//指向整数开头
 	while (*ptr)
 	{
-		if (!isdigit(*ptr))
-			break;//遇上不是非数字，退出循环
+		if (!isdigit(*ptr) && *ptr != 'A' && *ptr != 'B' && *ptr != 'C' && *ptr != 'D' && *ptr != 'E' && *ptr != 'F')
+			break;//遇上不是数字，退出循环
 		tret *= Redix;//乘以进制数
-		tret += ((*ptr) - 0x30);//加入新数字，计算待返回的数值
+		if ((*ptr) >= 'A')
+			tret += ((*ptr) - 0x30 - 7);//加入字母数字，计算待返回的数值
+		else
+			tret += ((*ptr) - 0x30);//加入新数字，计算待返回的数值
 		ptr++;
 	}
 	if (*ptr)
@@ -145,12 +148,14 @@ int main(void)
 	long val_i;//若是数字，返回的整数
 	double val_f;//若是数字，返回的浮点数值
 	char **strList = NULL;
+	printf("要输入n组字符串，n = ");
 	scanf("%d",&n);
 	getchar();
 	strList = (char**)malloc(n*sizeof(char*));
 	for (i=0;i<n;i++)
 	{
 		strList[i] = (char*)malloc(n*sizeof(char*));
+		printf("第 %d 组:\n",i+1);
 		gets(strList[i]);
 	}
 	printf("\n\n");
@@ -158,11 +163,11 @@ int main(void)
 	{
 		ret = IsNum(strList[i],&val_i,&val_f);
 		if (ret == 1)
-			printf(" %s is an Integer, value is %ld .\n",strList[i],val_i);//判断整数
+			printf("No.%d is an Integer, value is %ld .\n",i+1,val_i);//判断整数
 		else if (ret == 2)
-			printf(" %s is a Float, value is %lf .\n",strList[i],val_f);//判断浮点数
+			printf("No.%d is a Float, value is %lf .\n",i+1,val_f);//判断浮点数
 		else
-			printf(" %s is not a number.\n",strList[i]);//判断不是数
+			printf("No.%d is not a number.\n",i+1);//判断不是数
 	}
 
 	system("pause");
